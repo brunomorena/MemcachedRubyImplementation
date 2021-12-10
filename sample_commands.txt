@@ -1,0 +1,52 @@
+set foo 3 300 5
+hello
+
+add bar 5 400 5
+world
+
+replace foo 7 700 3
+bye
+
+append foo 0 800 6
+-after
+
+prepend foo 0 900 7
+before-
+
+cas bar 8 600 11 2
+checkandset
+
+get foo
+
+gets foo bar
+
+set exp 3 -1 3
+now
+
+get exp
+
+cas foo 10 300 4 1
+nope
+
+gets bar none foo
+
+purge
+
+---
+sets foo 3 300 5
+
+set buz 5 400 2
+two
+
+add foo 3 400 8
+repeated 
+
+replace faa 0 500 4
+none
+
+cas foo 10 300 4 1
+nope
+
+get none
+
+gets
