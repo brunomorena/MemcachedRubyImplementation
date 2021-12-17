@@ -1,120 +1,174 @@
 require_relative 'storage'
 require_relative 'constants'
 
+##############################
+# Storage validators
 
-def set_validator(full_command)
-    if !storage_arguments(full_command)
-        return false, ARGUMENTS_NUMBER
-    elsif !numeric_arguments(full_command)
-        return false, ARGUMENTS_TYPE
-    elsif !bytes_asigned(full_command[4], full_command[5])
-        return false, BYTES_NOT_MATCH
-    elsif !max_time(full_command[3])
-        return false, MAX_EXPTIME
+def set_validator(command)
+    if !storage_arguments(command)
+        validation = false
+        msg = ARGUMENTS_NUMBER
+    elsif !numeric_arguments(command)
+        validation = false
+        msg = ARGUMENTS_TYPE
+    elsif !bytes_asigned(command[4], command[5])
+        validation = false
+        msg = BYTES_NOT_MATCH
+    elsif !max_time(command[3])
+        validation = false
+        msg = MAX_EXPTIME
     else
-        return true, STORED    
+        validation = true
+        msg =STORED    
     end
+    return reply = Reply.new(validation, msg)
 end
 
-def add_validator(full_command)
-    if !storage_arguments(full_command)
-        return false, ARGUMENTS_NUMBER
-    elsif !numeric_arguments(full_command)
-        return false, ARGUMENTS_TYPE
-    elsif !bytes_asigned(full_command[4], full_command[5])
-        return false, BYTES_NOT_MATCH
-    elsif !max_time(full_command[3])
-        return false, MAX_EXPTIME
-    elsif stored_key(full_command[1]) && !expired_key(full_command[1])
-        return false, KEY_ALREADY_STORED
+def add_validator(command)
+    if !storage_arguments(command)
+        validation = false
+        msg = ARGUMENTS_NUMBER
+    elsif !numeric_arguments(command)
+        validation = false
+        msg = ARGUMENTS_TYPE
+    elsif !bytes_asigned(command[4], command[5])
+        validation = false
+        msg = BYTES_NOT_MATCH
+    elsif !max_time(command[3])
+        validation = false
+        msg = MAX_EXPTIME
+    elsif stored_key(command[1]) && !expired_key(command[1])
+        validation = false
+        msg = KEY_ALREADY_STORED
     else
-        return true, STORED 
+        validation = true
+        msg = STORED 
     end
+    return reply = Reply.new(validation, msg)
 end
 
-def replace_validator(full_command)
-    if !storage_arguments(full_command)
-        return false, ARGUMENTS_NUMBER
-    elsif !numeric_arguments(full_command)
-        return false, ARGUMENTS_TYPE
-    elsif !bytes_asigned(full_command[4], full_command[5])
-        return false, BYTES_NOT_MATCH
-    elsif !max_time(full_command[3])
-        return false, MAX_EXPTIME
-    elsif !stored_key(full_command[1])
-        return false, NO_KEY_STORED
-    elsif expired_key(full_command[1])
-        return false, EXPIRED_KEY
+def replace_validator(command)
+    if !storage_arguments(command)
+        validation = false
+        msg = ARGUMENTS_NUMBER
+    elsif !numeric_arguments(command)
+        validation = false
+        msg = ARGUMENTS_TYPE
+    elsif !bytes_asigned(command[4], command[5])
+        validation = false
+        msg = BYTES_NOT_MATCH
+    elsif !max_time(command[3])
+        validation = false
+        msg = MAX_EXPTIME
+    elsif !stored_key(command[1])
+        validation = false
+        msg = NO_KEY_STORED
+    elsif expired_key(command[1])
+        validation = false
+        msg = EXPIRED_KEY
     else
-        return true, STORED     
+        validation = true 
+        msg = STORED     
     end
+    return reply = Reply.new(validation, msg)
 end
 
-def append_validator(full_command)
-    if !storage_arguments(full_command)
-        return false, ARGUMENTS_NUMBER
-    elsif !numeric_arguments(full_command)
-        return false, ARGUMENTS_TYPE
-    elsif !bytes_asigned(full_command[4], full_command[5])
-        return false, BYTES_NOT_MATCH
-    elsif !stored_key(full_command[1])
-        return false, NO_KEY_STORED
-    elsif expired_key(full_command[1])
-        return false, EXPIRED_KEY
+def append_validator(command)
+    if !storage_arguments(command)
+        validation = false
+        msg = ARGUMENTS_NUMBER
+    elsif !numeric_arguments(command)
+        validation = false
+        msg = ARGUMENTS_TYPE
+    elsif !bytes_asigned(command[4], command[5])
+        validation = false
+        msg = BYTES_NOT_MATCH
+    elsif !stored_key(command[1])
+        validation = false
+        msg = NO_KEY_STORED
+    elsif expired_key(command[1])
+        validation = false
+        msg = EXPIRED_KEY
     else
-        return true, STORED     
+        validation = true 
+        msg = STORED     
     end
+    return reply = Reply.new(validation, msg)
 end
 
-def prepend_validator(full_command)
-    if !storage_arguments(full_command)
-        return false, ARGUMENTS_NUMBER
-    elsif !numeric_arguments(full_command)
-        return false, ARGUMENTS_TYPE
-    elsif !bytes_asigned(full_command[4], full_command[5])
-        return false, BYTES_NOT_MATCH
-    elsif !stored_key(full_command[1])
-        return false, NO_KEY_STORED
-    elsif expired_key(full_command[1])
-        return false, EXPIRED_KEY
+def prepend_validator(command)
+    if !storage_arguments(command)
+        validation = false
+        msg = ARGUMENTS_NUMBER
+    elsif !numeric_arguments(command)
+        validation = false
+        msg = ARGUMENTS_TYPE
+    elsif !bytes_asigned(command[4], command[5])
+        validation = false
+        msg = BYTES_NOT_MATCH
+    elsif !stored_key(command[1])
+        validation = false
+        msg = NO_KEY_STORED
+    elsif expired_key(command[1])
+        validation = false
+        msg = EXPIRED_KEY
     else
-        return true, STORED     
+        validation = true
+        msg = STORED     
     end
+    return reply = Reply.new(validation, msg)
 end
 
-def cas_validator(full_command)
-    if !cas_arguments(full_command)
-        return false, ARGUMENTS_NUMBER
-    elsif !numeric_arguments(full_command)
-        return false, ARGUMENTS_TYPE
-    elsif !numeric(full_command[5])
-        return false, ARGUMENTS_TYPE       
-    elsif !bytes_asigned(full_command[4], full_command[6])
-        return false, BYTES_NOT_MATCH
-    elsif !max_time(full_command[3])
-        return false, MAX_EXPTIME
-    elsif !stored_key(full_command[1])
-        return false, NO_KEY_STORED
-    elsif expired_key(full_command[1])
-        return false, EXPIRED_KEY   
-    elsif !modified(full_command[1], full_command[5])
-        return false, EXISTS
+def cas_validator(command)
+    if !cas_arguments(command)
+        validation = false
+        msg = ARGUMENTS_NUMBER
+    elsif !numeric_arguments(command)
+        validation = false
+        msg = ARGUMENTS_TYPE
+    elsif !numeric(command[5])
+        validation = false
+        msg = ARGUMENTS_TYPE       
+    elsif !bytes_asigned(command[4], command[6])
+        validation = false
+        msg = BYTES_NOT_MATCH
+    elsif !max_time(command[3])
+        validation = false
+        msg = MAX_EXPTIME
+    elsif !stored_key(command[1])
+        validation = false
+        msg = NO_KEY_STORED
+    elsif expired_key(command[1])
+        validation = false
+        msg = EXPIRED_KEY   
+    elsif !modified(command[1], command[5])
+        validation = false
+        msg = EXISTS
     else
-        return true, STORED 
+        validation = true
+        msg = STORED 
     end
+    return reply = Reply.new(validation, msg)
 end
+
+##############################
+# Retrieval validators
 
 def get_validator(command)
 
     if !get_arguments(command)
-        return false, GET_ARGUMENTS_NUMBER 
+        validation= false 
+        msg = GET_ARGUMENTS_NUMBER 
     else
-        return true
-    end 
+        validation= true
+        msg = ""
+    end
+    return reply = Reply.new(validation, msg) 
 end
 
-# def gets_validator(command)
-# end
+def gets_validator(command)
+    return reply = Reply.new(true, "")
+end
 
 ##############################
 # Auxiliary validators
@@ -147,16 +201,16 @@ def max_time(exptime)
     end
 end
 
-def storage_arguments(full_command)
-    if full_command.length == 6
+def storage_arguments(command)
+    if command.length == 6
         return true
     else
         return false
     end
 end
 
-def cas_arguments(full_command)
-    if full_command.length == 7
+def cas_arguments(command)
+    if command.length == 7
         return true
     else
         return false
@@ -172,11 +226,11 @@ def get_arguments(command)
 end
 
 def stored_key(key)
-    return @callstorage.stored_key(key)        
+    return Factory.callstorage.stored_key(key)        
 end
 
 def modified(key, cas_unique)
-    if @callstorage.cas_unique(key).to_i == cas_unique.to_i 
+    if Factory.callstorage.cas_unique(key).to_i == cas_unique.to_i 
         return true
     else
         return false
@@ -184,6 +238,5 @@ def modified(key, cas_unique)
 end
 
 def expired_key(key)
-    return @callstorage.expired_key(key)
+    return Factory.callstorage.expired_key(key)
 end
-

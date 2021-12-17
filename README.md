@@ -51,11 +51,13 @@ telnet localhost 11211
 
 Once the connection has been established you can type commands.
 
-To run the tests open a cmd on the 'spec' folder and type:
+To run the tests open a cmd on the folder of the project and type:
 
 ``` rb
-rspec unit_testing_spec.rb
+rspec
 ```
+
+This command will run all the tests at the defined order (alphanumeric) and these are not independent.
 
 ## Command syntax
 
